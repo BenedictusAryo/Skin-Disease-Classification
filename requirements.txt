@@ -1,0 +1,20 @@
+torch --index-url https://download.pytorch.org/whl/cu121
+torchvision --index-url https://download.pytorch.org/whl/cu121
+torchaudio --index-url https://download.pytorch.org/whl/cu121
+albumentations
+ipykernel
+jupyter
+lightning
+pandas
+numpy
+matplotlib
+ipywidgets
+prettytable
+torchsummary
+tqdm
+loguru
+pydantic
+pydantic-settings
+# protobuf==3.19.0
+thop
+onnx
