@@ -33,6 +33,9 @@ model = ImageClassificationModel(
     num_classes=len(ISIC_2018_CLASSES),
     learning_rate=config.LEARNING_RATE,
 )
+# Model Summary
+print("Model Summary")
+model.print_model_summary()
 
 # Trainer
 trainer = TrainerModule(
@@ -40,10 +43,7 @@ trainer = TrainerModule(
 ).trainer
 
 # Run the model
-if __name__ == "__main__":
-    # Model Summary
-    print("Model Summary")
-    model.print_model_summary()
+if __name__ == "__main__":    
     # Tune to fine the best hyperparameters
     tuner = TunerModule(trainer)
     # Auto-scale batch size with binary search
