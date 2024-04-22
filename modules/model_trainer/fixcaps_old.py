@@ -1,3 +1,6 @@
+""" 
+FixCaps Model Architecture.
+"""
 import torch
 import time
 import torch.nn as nn
@@ -5,30 +8,33 @@ import torch.optim as optim
 from torch.autograd import Variable
 import torch.nn.functional as F
 
-loc_time = time.strftime("%H%M%S", time.localtime()) 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-ratio = 8
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+RATIO = 8
 
 class FixCapsNet(nn.Module):
-    def __init__(self,conv_inputs,conv_outputs,
-                 primary_units,primary_unit_size,
-                 output_unit_size,num_classes=7,
-                 init_weights=False,mode="DS"):
+    def __init__(
+        self, 
+        conv_inputs, conv_outputs,
+        primary_units, primary_unit_size,
+        output_unit_size, num_classes=7,
+        init_weights=False, mode="DS"):
         super().__init__()
         
         self.Convolution = make_features(cfgs[mode],f_c=conv_inputs,out_c=conv_outputs)
         
         self.CBAM = Conv_CBAM(conv_outputs,conv_outputs)
         
-        self.primary = Primary_Caps(in_channels=conv_outputs,#128
-                                    caps_units=primary_units,#8
-                                    )
+        self.primary = Primary_Caps(
+            in_channels=conv_outputs,#128
+            caps_units=primary_units,#8
+        )
 
-        self.digits = Digits_Caps(in_units=primary_units,#8
-                                   in_channels=primary_unit_size,#16*6*6=576
-                                   num_units=num_classes,#classification_num
-                                   unit_size=output_unit_size,#16
-                                   )
+        self.digits = Digits_Caps(
+            in_units=primary_units, #8
+            in_channels=primary_unit_size, #16*6*6=576
+            num_units=num_classes, #classification_num
+            unit_size=output_unit_size, #16
+        )
         if init_weights:
             self._initialize_weights()
         
@@ -55,15 +61,10 @@ class FixCapsNet(nn.Module):
         v_mag = torch.sqrt(torch.sum(img_input**2, dim=2, keepdim=True))
 
         # Calculate left and right max() terms from equation 4 in the paper.
-        zero = Variable(torch.zeros(1)).to(device)
+        zero = Variable(torch.zeros(1)).to(DEVICE)
         m_plus, m_minus = 0.9, 0.1
         max_l = torch.max(m_plus - v_mag, zero).view(batch_size, -1)**2
         max_r = torch.max(v_mag - m_minus, zero).view(batch_size, -1)**2
-        
-        # # Convert target to one-hot encoding
-        # T_c = torch.zeros(batch_size, 7).to(device)
-        # T_c.scatter_(1, target.view(-1, 1), 1.)
-        
         # This is equation 4 from the paper.
         loss_lambda = 0.5
         T_c = target
@@ -123,7 +124,7 @@ class Digits_Caps(nn.Module):
         # (batch_size, features, num_units, unit_size, 1)
         u_hat = torch.matmul(W, x)
         # Initialize routing logits to zero.
-        b_ij = Variable(torch.zeros(1, self.in_channels, self.num_units, 1)).to(device)
+        b_ij = Variable(torch.zeros(1, self.in_channels, self.num_units, 1)).to(DEVICE)
 
         num_iterations = 3
         for iteration in range(num_iterations):
@@ -155,7 +156,7 @@ class Digits_Caps(nn.Module):
 class ConvUnit(nn.Module):
     def __init__(self, in_channels):
         super(ConvUnit, self).__init__()
-        Caps_out = in_channels // ratio
+        Caps_out = in_channels // RATIO
         self.Cpas = nn.Sequential(
                         nn.Conv2d(in_channels,Caps_out,9,stride=2,groups=Caps_out, bias=False),
                     )
@@ -288,6 +289,5 @@ cfgs= {
     "DS2": ["C",3,'N','B','R','F'],# g = 3,  primary_unit_size = 16 * 6 * 6 
     "256" : [256,'R','F'],# g = 1,  primary_unit_size = 32 * 6 * 6 
     "128" : [128,'R','F'],# g = 1, primary_unit_size = 16 * 6 * 6 
-    "64"  : [64,'R','F'],# g = 1 , primary_unit_size = 8 * 6 * 6 
-    
+    "64"  : [64,'R','F'],# g = 1 , primary_unit_size = 8 * 6 * 6     
 }

@@ -23,3 +23,18 @@ class AppSettings(BaseSettings):
     ENV: str = "DEV"
 
     # Trainer
+    LEARNING_RATE: float = 0.001
+    BATCH_SIZE: int = 32
+    MAX_EPOCHS: int = 10
+    NUM_WORKERS: int = 4
+    LOG_EVERY_N_STEPS: int = 10
+    EARLY_STOPPING_PATIENCE: int = 3
+    IMAGE_SIZE: int = 224
+    
+    # Model
+    MODEL_DIR: str = "models"
+    
+    # Config File
+    class Config:
+        env_file = env_file
+        env_file_encoding = "utf-8"
