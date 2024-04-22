@@ -60,7 +60,8 @@ class ImageClassificationModel(L.LightningModule):
         output = self(data)
         loss = self.model.loss(output, label_onehot)
         v_mag = torch.sqrt(torch.sum(output**2, dim=2, keepdim=True)) 
-        preds = v_mag.data.max(1, keepdim=True)[1].to(DEVICE).squeeze()
+        # preds = v_mag.data.max(1, keepdim=True)[1].to(DEVICE).squeeze()
+        preds = v_mag.data.max(1, keepdim=True)[1].squeeze()
         return preds, label, loss
     
     def training_step(self, batch: Any, batch_idx: int) -> torch.Tensor:
