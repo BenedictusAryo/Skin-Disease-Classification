@@ -53,15 +53,15 @@ class ISIC_2018_Dataset(datasets.ImageFolder):
         return len(self.image_files)
     
     def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
-        # img = Image.open(self.image_files[idx])
-        # if self.transform:
-        #     img = self.transform(img)
-        img = cv2.imread(
-            str(self.image_files[idx])
-        )[..., ::-1] # BGR to RGB
+        img = Image.open(self.image_files[idx])
         if self.transform:
-            img = self.transform(image=img)['image']
-            img = torch.from_numpy(img).permute(2, 0, 1) # HWC to CHW
+            img = self.transform(img)
+        # img = cv2.imread(
+        #     str(self.image_files[idx])
+        # )[..., ::-1] # BGR to RGB
+        # if self.transform:
+        #     img = self.transform(image=img)['image']
+        #     img = torch.from_numpy(img).permute(2, 0, 1) # HWC to CHW
         label_array = self.ground_truth.loc[self.image_files[idx].stem].values
         label = np.argmax(label_array)
         label_onehot = torch.from_numpy(label_array.reshape(-1, self.num_classes)).float()

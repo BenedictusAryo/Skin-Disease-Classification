@@ -10,22 +10,22 @@ from modules.model_trainer.augmentation_transforms import get_transforms
 from torchvision import transforms
 
 
-# data_transform = {
-#         "train": transforms.Compose([transforms.RandomResizedCrop((299, 299)),
-#                                      transforms.RandomVerticalFlip(),
-#                                      transforms.ToTensor(),
-#                                      transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
-#         "val": transforms.Compose([transforms.Resize((308, 308)),
-#                                    transforms.CenterCrop((299, 299)),
-#                                    transforms.ToTensor(),
-#                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-#                                   ]),
-#         "test": transforms.Compose([transforms.Resize((308, 308)),
-#                                    transforms.CenterCrop((299, 299)),
-#                                    transforms.ToTensor(),
-#                                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-#                                   ])
-#         }
+data_transform = {
+        "train": transforms.Compose([transforms.RandomResizedCrop((299, 299)),
+                                     transforms.RandomVerticalFlip(),
+                                     transforms.ToTensor(),
+                                     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
+        "val": transforms.Compose([transforms.Resize((308, 308)),
+                                   transforms.CenterCrop((299, 299)),
+                                   transforms.ToTensor(),
+                                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                                  ]),
+        "test": transforms.Compose([transforms.Resize((308, 308)),
+                                   transforms.CenterCrop((299, 299)),
+                                   transforms.ToTensor(),
+                                   transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+                                  ])
+        }
 
 
 class ImageClassificationDataModule(L.LightningDataModule):
@@ -54,7 +54,7 @@ class ImageClassificationDataModule(L.LightningDataModule):
         self.test_img_folder = test_img_folder
         self.test_ground_truth_file = test_ground_truth_file
         # Set transforms
-        self.transforms_train, self.transforms_val = get_transforms(config)
+        self.transforms_train, self.transforms_val = data_transform["train"], data_transform["val"]
         # Setup the data
         self.setup()
         self.save_hyperparameters()
