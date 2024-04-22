@@ -55,7 +55,7 @@ class FixCapsNet(nn.Module):
         v_mag = torch.sqrt(torch.sum(img_input**2, dim=2, keepdim=True))
 
         # Calculate left and right max() terms from equation 4 in the paper.
-        zero = Variable(torch.zeros(1))#.to(device)
+        zero = Variable(torch.zeros(1)).to(device)
         m_plus, m_minus = 0.9, 0.1
         max_l = torch.max(m_plus - v_mag, zero).view(batch_size, -1)**2
         max_r = torch.max(v_mag - m_minus, zero).view(batch_size, -1)**2
@@ -123,7 +123,7 @@ class Digits_Caps(nn.Module):
         # (batch_size, features, num_units, unit_size, 1)
         u_hat = torch.matmul(W, x)
         # Initialize routing logits to zero.
-        b_ij = Variable(torch.zeros(1, self.in_channels, self.num_units, 1))#.to(device)
+        b_ij = Variable(torch.zeros(1, self.in_channels, self.num_units, 1)).to(device)
 
         num_iterations = 3
         for iteration in range(num_iterations):
