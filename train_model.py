@@ -33,9 +33,9 @@ model = ImageClassificationModel(
     num_classes=len(ISIC_2018_CLASSES),
     learning_rate=config.LEARNING_RATE,
 )
-# Model Summary
-print("Model Summary")
-model.print_model_summary()
+# # Model Summary
+# print("Model Summary")
+# model.print_model_summary()
 
 # Trainer
 trainer = TrainerModule(
