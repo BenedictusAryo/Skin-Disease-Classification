@@ -11,6 +11,7 @@ from torchvision.models import efficientnet_v2_l, EfficientNet_V2_L_Weights
 from settings import AppSettings
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+torch.set_float32_matmul_precision("medium")
 
 
 class EfficientNetV2(L.LightningModule):

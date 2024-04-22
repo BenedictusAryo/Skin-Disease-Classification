@@ -1,6 +1,7 @@
 """
 Train Model
 """
+import torch
 from modules.model_trainer.datamodule import ImageClassificationDataModule
 from modules.model_trainer.dataset import ISIC_2018_CLASSES, ISIC_2018_Dataset
 from modules.model_trainer.efficientnetv2 import EfficientNetV2
@@ -8,6 +9,7 @@ from modules.model_trainer.trainer import TrainerModule, TunerModule
 from modules.model_trainer.augmentation_transforms import get_transforms
 from settings import AppSettings
 
+torch.set_float32_matmul_precision("medium")
 
 # Get config
 config = AppSettings()
@@ -32,6 +34,8 @@ model = EfficientNetV2(
     config=config,
     num_classes=len(ISIC_2018_CLASSES),
 )
+# Compile Model
+model = torch.compile(model)
 # # Model Summary
 # print("Model Summary")
 # model.print_model_summary()

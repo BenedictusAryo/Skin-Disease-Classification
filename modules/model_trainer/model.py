@@ -13,6 +13,7 @@ from modules.model_trainer.fixcaps import FixCapsNet
 from settings import AppSettings
 
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+torch.set_float32_matmul_precision("medium")
 
 class ImageClassificationModel(L.LightningModule):
     """

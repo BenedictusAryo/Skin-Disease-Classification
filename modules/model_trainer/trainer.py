@@ -53,6 +53,7 @@ class TrainerModule:
                 ModelCheckpoint(save_last=True),
             ],
             logger=[wandb_logger, tensorboard_logger],
+            precision=16,
         )
         
         
