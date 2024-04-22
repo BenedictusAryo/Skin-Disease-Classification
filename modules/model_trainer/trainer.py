@@ -41,8 +41,16 @@ class TrainerModule:
                 ModelCheckpoint(
                     filename="best_model_{epoch}-{val_loss:.2f}-{val_acc:.2f}",
                     monitor='val_loss',
-                    mode='min'
-                )
+                    mode='min',
+                    verbose=True,
+                ),
+                ModelCheckpoint(
+                    filename="best_model_{epoch}-{val_loss:.2f}-{val_acc:.2f}",
+                    monitor='val_acc_epoch',
+                    mode='max',
+                    verbose=True,
+                ),
+                ModelCheckpoint(save_last=True),
             ],
             logger=[wandb_logger, tensorboard_logger],
         )
