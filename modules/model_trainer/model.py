@@ -12,6 +12,7 @@ from PIL import Image
 from modules.model_trainer.fixcaps import FixCapsNet
 from settings import AppSettings
 
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 class ImageClassificationModel(L.LightningModule):
     """
@@ -59,7 +60,7 @@ class ImageClassificationModel(L.LightningModule):
         output = self(data)
         loss = self.model.loss(output, label_onehot)
         v_mag = torch.sqrt(torch.sum(output**2, dim=2, keepdim=True)) 
-        preds = v_mag.data.max(1, keepdim=True)[1].cpu().squeeze()
+        preds = v_mag.data.max(1, keepdim=True)[1].to(DEVICE).squeeze()
         return preds, label, loss
     
     def training_step(self, batch: Any, batch_idx: int) -> torch.Tensor:
