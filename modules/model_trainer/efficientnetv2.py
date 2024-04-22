@@ -32,7 +32,7 @@ class EfficientNetV2(L.LightningModule):
         self.model = efficientnet_v2_l(
             weights=EfficientNet_V2_L_Weights.IMAGENET1K_V1,
         )
-        self.model.classifier[1].out_features = num_classes
+        self.model.classifier[1] = nn.Linear(self.model.classifier[1].in_features, num_classes)
         self.train_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
         self.val_acc = torchmetrics.Accuracy(task="multiclass", num_classes=num_classes)
         self.val_recall = torchmetrics.Recall(task="multiclass", num_classes=num_classes, average='macro')
@@ -49,7 +49,7 @@ class EfficientNetV2(L.LightningModule):
     
     def _common_stage(self, batch: Any, stage: Literal["train", "val", "test"]) -> torch.Tensor:
         assert stage in ("train", "val", "test")
-        data, label, label_onehot = batch
+        data, label = batch
         output = self(data)
         loss = self.criterion(output, label)
         return loss, output, label
