@@ -45,9 +45,9 @@ trainer = TrainerModule(
 # Run the model
 if __name__ == "__main__":    
     # Tune to fine the best hyperparameters
-    tuner = TunerModule(trainer)
+    # tuner = TunerModule(trainer)
     # Auto-scale batch size with binary search
-    tuner.scale_batch_size(model=model, datamodule=data_module, mode="binsearch")
+    # tuner.scale_batch_size(model=model, datamodule=data_module, mode="binsearch")
 
     # Train the model
     trainer.fit(model, datamodule=data_module)
