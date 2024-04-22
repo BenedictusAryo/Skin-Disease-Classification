@@ -167,3 +167,6 @@ data/
 
 # Envs
 envs/.env.prod
+
+# Models
+*.ckpt

@@ -18,3 +18,5 @@ pydantic-settings
 # protobuf==3.19.0
 thop
 onnx
+tensorboardx
+wandb
