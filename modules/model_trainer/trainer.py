@@ -6,10 +6,11 @@ import lightning as L
 from settings import AppSettings
 from lightning.pytorch.callbacks import EarlyStopping
 from lightning.pytorch.callbacks import ModelCheckpoint
-from lightning.pytorch.loggers import WandbLogger
+from lightning.pytorch.loggers import WandbLogger, TensorBoardLogger
 
 
 wandb_logger = WandbLogger(log_model='all', project='SkinDiseaseClassification_ISIC_2018')
+tensorboard_logger = TensorBoardLogger(save_dir='models')
 
 class TunerModule:
     """Tuner Module."""
@@ -43,7 +44,7 @@ class TrainerModule:
                     mode='min'
                 )
             ],
-            logger=wandb_logger,
+            logger=[wandb_logger, tensorboard_logger],
         )
         
         

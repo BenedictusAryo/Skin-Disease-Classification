@@ -54,7 +54,8 @@ class ImageClassificationDataModule(L.LightningDataModule):
         self.test_img_folder = test_img_folder
         self.test_ground_truth_file = test_ground_truth_file
         # Set transforms
-        self.transforms_train, self.transforms_val = data_transform["train"], data_transform["val"]
+        # self.transforms_train, self.transforms_val = data_transform["train"], data_transform["val"]
+        self.transforms_train, self.transforms_val = get_transforms(config)
         # Setup the data
         self.setup()
         self.save_hyperparameters()
